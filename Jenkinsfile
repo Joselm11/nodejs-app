@@ -10,9 +10,19 @@ pipeline {
             }
         }
 
-        stage('Install Dependencies') {
+        stage('Install Node.js & Dependencies') {
             steps {
-                sh 'npm install'
+                sh '''
+                apt-get update
+                apt-get install -y curl
+                curl -fsSL https://deb.nodesource.com/setup_18.x | bash -
+                apt-get install -y nodejs
+
+                node -v
+                npm -v
+
+                npm install
+                '''
             }
         }
 
