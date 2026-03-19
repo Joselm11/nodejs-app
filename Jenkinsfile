@@ -1,9 +1,5 @@
 pipeline {
-    agent {
-        docker {
-            image 'node:18'
-        }
-    }
+    agent any
 
     stages {
 
@@ -14,15 +10,35 @@ pipeline {
             }
         }
 
+        stage('Setup Node.js') {
+            steps {
+                sh '''
+                curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+                . ~/.nvm/nvm.sh
+                nvm install 18
+                nvm use 18
+
+                node -v
+                npm -v
+                '''
+            }
+        }
+
         stage('Install Dependencies') {
             steps {
-                sh 'npm install'
+                sh '''
+                . ~/.nvm/nvm.sh
+                npm install
+                '''
             }
         }
 
         stage('Build') {
             steps {
-                sh 'npm run build'
+                sh '''
+                . ~/.nvm/nvm.sh
+                npm run build
+                '''
             }
         }
     }
