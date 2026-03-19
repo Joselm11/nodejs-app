@@ -1,6 +1,10 @@
 pipeline {
     agent any
 
+    tools {
+        nodejs 'Node18'
+    }
+
     stages {
 
         stage('Checkout') {
@@ -10,35 +14,15 @@ pipeline {
             }
         }
 
-        stage('Setup Node.js') {
-            steps {
-                sh '''
-                curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
-                . ~/.nvm/nvm.sh
-                nvm install 18
-                nvm use 18
-
-                node -v
-                npm -v
-                '''
-            }
-        }
-
         stage('Install Dependencies') {
             steps {
-                sh '''
-                . ~/.nvm/nvm.sh
-                npm install
-                '''
+                sh 'npm install'
             }
         }
 
         stage('Build') {
             steps {
-                sh '''
-                . ~/.nvm/nvm.sh
-                npm run build
-                '''
+                sh 'npm run build'
             }
         }
     }
